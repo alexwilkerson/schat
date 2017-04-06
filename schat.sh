@@ -21,7 +21,7 @@ tail -F /tmp/.schat.log | sed \\
      -e "s/\*\(.*\)\*/\o033[1m\\1\o033[0m/"
 EOF
 
-# script for bottom pan
+# script for bottom pane
 cat > /tmp/.bottom_pane_$userid.sh << EOF
 #!$(which bash)
 function cleanup {
@@ -30,15 +30,16 @@ function cleanup {
     tmux kill-session -t schat
 }
 
-echo -e "[\$(TZ=UTC-7 date '+%F %H:%M')] \e[1m\e[35m$userid enters the room.\e[0m" >> \\
+echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[35m$userid enters the room.\e[0m" >> \\
     /tmp/.schat.log
 
 while true; do
     echo -en "\r\e[1m\e[35mmessage: \e[0m"
     read messg
+    $firstchar = ${messg:0:1}
     if [ "\$messg" == '!exit' ]
     then
-        echo -e "[\$(TZ=UTC-7 date '+%F %H:%M')] \e[1m\e[35m$userid leaves the room.\e[0m" >> \\
+        echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[35m$userid leaves the room.\e[0m" >> \\
         /tmp/.schat.log
         break
     elif [ "\$messg" == '!deletelog' ]
@@ -46,13 +47,36 @@ while true; do
         rm /tmp/.schat.log
         touch /tmp/.schat.log
         chmod a+w /tmp/.schat.log
-        echo -e "[\$(TZ=UTC-7 date '+%F %H:%M')] \e[1m\e[35m$userid deleted chat log.\e[0m" >> \\
+        echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[35m$userid deleted chat log.\e[0m" >> \\
         /tmp/.schat.log
         clear
-    else
-        echo "[\$(TZ=UTC-7 date '+%F %H:%M')] $userid: \$messg" >> \\
+    elif [ "\$messg" == 'Shrek' ]
+    then
+        while read line; do
+            sleep 1
+            echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[34m$userid:\e[0m \$line" >> \\
             /tmp/.schat.log && \\
             clear
+        done < /tmp/.allstar.txt
+    elif [[ \$messg =~ ^! ]]
+    then
+        clear
+        setterm -cursor off
+        /tmp/.commander $userid "\$messg"
+        setterm -cursor on
+        clear
+    elif [ "\${messg/%\ */}" == '!roll' ]
+    then
+        # lastarg=("\${messg/#*\ /}")
+        local lastarg="test"
+        echo \$lastarg >> /tmp/.schat.log
+        echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[34m$userid's d20 landed on \$((1 + RANDOM % 20)).\e[0m" >> \\
+        /tmp/.schat.log && \\
+        clear
+    else
+        echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[34m$userid:\e[0m \$messg" >> \\
+        /tmp/.schat.log && \\
+        clear
     fi
 done
 cleanup
