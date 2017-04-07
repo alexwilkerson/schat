@@ -3,6 +3,8 @@ update:
 	chmod a+x /tmp/.schat.sh
 	cp .commander /tmp/.commander
 	cp .logreader /tmp/.logreader
+	touch /tmp/.schat.log
+	chmod a+wr /tmp/.schat.log
 
 purify:
 	rm /tmp/.schat.sh
