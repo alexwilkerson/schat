@@ -18,7 +18,7 @@ echo -e "\e[1m\e[31mtype !exit to exit\e[0m"
 echo ""
 tail -F /tmp/.schat.log | sed \\
      -e "s/\($userid:\)/\o033[31m\o033[1m\1\o033[0m/" \\
-     -e "s/\*\(.*\)\*/\o033[1m\\1\o033[0m/"
+     -e "s/\*\(.*\)\*/\o033[1m\\1\o033[0m/" | ./printprint.py
 EOF
 
 # script for bottom pane
@@ -36,7 +36,6 @@ echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[35m$userid enters the room.\e[0
 while true; do
     echo -en "\r\e[1m\e[35mmessage: \e[0m"
     read -e messg
-    $firstchar = ${messg:0:1}
     if [ "\$messg" == '!exit' ]
     then
         echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[35m$userid leaves the room.\e[0m" >> \\
