@@ -53,9 +53,9 @@ runderline = "\033[24m" #reset
 blink =      "\033[5m"
 rblink =     "\033[25m" #reset
 invert =     "\033[7m"
-rinvert =    "\033[7m"  #reset
+rinvert =    "\033[27m" #reset
 hidden =     "\033[8m"
-rhidden =    "\033[8m"  #reset
+rhidden =    "\033[28m" #reset
 
 cmd = sys.argv[2][1:].split()
 thetime = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M]");
