@@ -80,7 +80,7 @@ def roll(dice):
                     + str(the_roll) + yellow + "." + default + "\n")
             f.close()
         except:
-            display_warning("Whoopsie!")
+            display_warning("Whoopsie! Enter something like \"!roll 1d20\".", 2)
     else:
         display_warning("Invalid number of commands.")
 

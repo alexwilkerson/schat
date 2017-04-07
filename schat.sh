@@ -65,14 +65,6 @@ while true; do
         ./.commander $userid "\$messg"
         setterm -cursor on
         clear #comment out this line to error check
-    elif [ "\${messg/%\ */}" == '!roll' ]
-    then
-        # lastarg=("\${messg/#*\ /}")
-        local lastarg="test"
-        echo \$lastarg >> /tmp/.schat.log
-        echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[34m$userid's d20 landed on \$((1 + RANDOM % 20)).\e[0m" >> \\
-        /tmp/.schat.log && \\
-        clear
     else
         echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[34m$userid:\e[0m \$messg" >> \\
         /tmp/.schat.log && \\
