@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+import sys 
+import os
+
+userid = os.getlogin()
+
+while True:
+    line = sys.stdin.readline()
+    if not line:
+        break
+    if line.strip() == "pumpkin":
+        sys.stdout.write("blumpkin\n")
+    else:
+        line = line.replace(userid + ":", "\033[31m" + userid + ":\033[0m")
+        sys.stdout.write(line) # or print, doesn't matter.
