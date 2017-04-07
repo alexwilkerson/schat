@@ -35,7 +35,7 @@ echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[35m$userid enters the room.\e[0
 
 while true; do
     echo -en "\r\e[1m\e[35mmessage: \e[0m"
-    read messg
+    read -e messg
     $firstchar = ${messg:0:1}
     if [ "\$messg" == '!exit' ]
     then
@@ -52,7 +52,7 @@ while true; do
         clear
     elif [ "\$messg" == 'Shrek' ]
     then
-        while read line; do
+        while read -e line; do
             sleep 1
             echo -e "[\$(TZ=UTC+5 date '+%F %H:%M')] \e[1m\e[34m$userid:\e[0m \$line" >> \\
             /tmp/.schat.log && \\
@@ -62,9 +62,9 @@ while true; do
     then
         clear
         setterm -cursor off
-        /tmp/.commander $userid "\$messg"
+        ./.commander $userid "\$messg"
         setterm -cursor on
-        clear
+        clear #comment out this line to error check
     elif [ "\${messg/%\ */}" == '!roll' ]
     then
         # lastarg=("\${messg/#*\ /}")

@@ -5,6 +5,11 @@ import random, re
 from time import sleep
 import datetime
 
+red = "\033[33m"
+yellow = "\033[31m"
+normal = "\033[0m"
+
+arguments = sys.argv[2][1:].split()
 thetime = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M]");
 userid = sys.argv[1]
 
@@ -13,35 +18,35 @@ def printtest():
     f.write("test\n")
     f.close()
 
-def display_warning(warning, delay):
+def display_warning(warning, delay=1):
     print("\033[31m\033[1m" + warning + "\033[0m")
     sleep(delay)
 
 def roll(dice):
-    try:
-        a,b,c=re.findall("^(\d*)d(\d+)(\+\d+)?$",dice)[0];the_roll=int(c or 0)+(sum(random.randint(1,int(b))for i in range(int(a or 1)))or q)
-        f = open("/tmp/.schat.log", "a")
-        f.write(thetime + " \033[33m" + userid + " rolled \033[31m" + dice + "\033[33m and got a \033[31m" + str(the_roll) + "\033[33m.\033[0m\n")
-        f.close()
-    except:
-        display_warning("Invalid input.", 1)
+    if len(arguments) == 2:
+        try:
+            a,b,c=re.findall("^(\d*)d(\d+)(\+\d+)?$",dice)[0];the_roll=int(c or 0)+(sum(random.randint(1,int(b))for i in range(int(a or 1)))or q)
+            f = open("/tmp/.schat.log", "a")
+            f.write(thetime + " " + yellow + userid + " rolled "
+                    + red + dice + yellow + " and got a " + red
+                    + str(the_roll) + yellow + "." + normal + "\n")
+            f.close()
+        except:
+            display_warning("Whoopsie!")
+    else:
+        display_warning("Invalid number of arguments.")
 
 def print_log(s):
     return thetime + " \033[31m" + userid + ": " + s + "\033[0m\n"
 
 def Main():
-    arguments = sys.argv[2][1:].split()
-
     if arguments[0] == "roll":
-        if len(arguments) == 2:
-            t = threading.Thread(name="roll", kwargs={'dice': arguments[1]}, target=roll)
-            t.start()
-        else:
-            display_warning("Invalid number of arguments.", 1)
+        if len(arguments) == 1:
+            arguments.append("1d20") # makes default 1d20 roll if user supplies nothing else
+        t = threading.Thread(name="roll", kwargs={'dice': arguments[1]}, target=roll)
+        t.start()
     else:
-        display_warning("Command not found.", 1)
-
-    # display_warning(arguments[0], 1)
+        display_warning("Command not found.")
 
 if __name__ == "__main__":
     Main()
