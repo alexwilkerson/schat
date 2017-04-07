@@ -82,7 +82,7 @@ def roll(dice):
         except:
             display_warning("Whoopsie!")
     else:
-        display_warning("Invalid number of cmd.")
+        display_warning("Invalid number of commands.")
 
 def print_log(s):
     return thetime + red + userid + ": " + s + default + "\n"
