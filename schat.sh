@@ -8,6 +8,8 @@
 
 # get username
 userid=$(whoami)
+# change this to /tmp/ if updating
+dir="./"
 
 # script for top pane
 cat > /tmp/.top_pane_$userid.sh << EOF
@@ -17,7 +19,7 @@ echo -e "\e[1m\e[31m*** \e[35mwelcome to schat school chat \e[31m***\e[0m"
 echo -e "\e[1m\e[31mtype !exit to exit\e[0m"
 echo ""
 # logreader reads the incoming text, can split processes
-tail -F /tmp/.schat.log | /tmp/.logreader
+tail -F /tmp/.schat.log | $dir.logreader
 EOF
 
 # script for bottom pane
@@ -60,7 +62,7 @@ while true; do
     then
         clear
         setterm -cursor off
-        /tmp/.commander $userid "\$messg"
+        $dir.commander $userid "\$messg"
         setterm -cursor on
         clear #comment out this line to error check
     else
