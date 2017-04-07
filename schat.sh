@@ -16,9 +16,8 @@ touch /tmp/.schat.log
 echo -e "\e[1m\e[31m*** \e[35mwelcome to schat school chat \e[31m***\e[0m"
 echo -e "\e[1m\e[31mtype !exit to exit\e[0m"
 echo ""
-tail -F /tmp/.schat.log | sed \\
-     -e "s/\($userid:\)/\o033[31m\o033[1m\1\o033[0m/" \\
-     -e "s/\*\(.*\)\*/\o033[1m\\1\o033[0m/" | ./printprint.py
+# logreader reads the incoming text, can split processes
+tail -F /tmp/.schat.log | /tmp/.logreader
 EOF
 
 # script for bottom pane
@@ -61,7 +60,7 @@ while true; do
     then
         clear
         setterm -cursor off
-        ./.commander $userid "\$messg"
+        /tmp/.commander $userid "\$messg"
         setterm -cursor on
         clear #comment out this line to error check
     else
