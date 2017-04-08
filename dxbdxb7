@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+import subprocess, os, atexit
+from time import sleep
+from termcolors import *
+
+def exit_handler():
+    os.system('clear')
+
+def Main():
+    atexit.register(exit_handler)
+    os.system('setterm -cursor off')
+    while True:
+        users = []
+        ps = subprocess.Popen(['ps', '-au'], stdout=subprocess.PIPE).communicate()[0].decode('utf-8').splitlines()
+        for p in ps:
+            if ".dxbdxb7" in p:
+                users.append(p.split()[0])
+        os.system('clear')
+        print(yellow + "online:" + default)
+        print("\n".join(list(set(users))))
+        sleep(1)
+    
+if __name__ == "__main__":
+    Main()

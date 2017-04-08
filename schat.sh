@@ -13,6 +13,8 @@ chmod a+rw /tmp/.schat.log
 
 # set up tmux session
 tmux new-session -d -s "schattr" "/tmp/.eater"
-tmux split-window -v "/tmp/.feeder"
-tmux resize-pane -D 20
+tmux split-window -h "/tmp/.bl"
+tmux resize-pane -t 1 -x 20
+tmux split-window -t 0 -v "/tmp/.feeder"
+tmux resize-pane -t 2 -y 2
 tmux attach-session 
