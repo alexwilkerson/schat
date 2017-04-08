@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+
+##################################
+# this is the bottom pane.
+# this is where text is typed,
+# commands are received, and
+# processed.
+##################################
+
+import os
+import datetime
+import random, re
+from time import sleep
+from termcolors import *
+
+userid = os.getlogin()
+
+def send(line):
+    try:
+        f = open("/tmp/.schat.log", "a")
+        f.write(line + default + "\n")
+        f.close()
+    except:
+        f.close()
+
+def thetime():
+    return datetime.datetime.now().strftime("[%Y-%m-%d %H:%M]");
+    
+def display_prompt():
+    running = True
+    while running:
+        os.system('clear')
+        message = input(bold + magenta + "message: " + default).rstrip()
+        if message[:1] == "!":
+            commands = message[1:].split()
+            # exit
+            if commands[0] == "exit" and len(commands) == 1:
+                exit_room()
+                os.system('tmux kill-session -t schattr')
+            # dice roll
+            elif commands[0] == "roll":
+                if len(commands) == 1:
+                    roll("1d20")
+                elif len(commands) == 2:
+                    roll(commands[1])
+                else:
+                    display_warning("Invalid number of arguments.")
+            # command not found
+            else:
+                display_warning("Command not found.")
+        else:
+            send(thetime() + " " + bold + blue + userid + ": " + message)
+
+def roll(dice):
+    try:
+        a,b,c=re.findall("^(\d*)d(\d+)(\+\d+)?$",dice)[0];the_roll=int(c or 0)+(sum(random.randint(1,int(b))for i in range(int(a or 1)))or q)
+        send(thetime() + " " + yellow + userid + " rolled "
+                + red + dice + yellow + " and got a " + red
+                + str(the_roll) + yellow + ".")
+    except:
+        display_warning("Whoopsie! Enter something like \"!roll 1d20\".", 2)
+
+def enter_room():
+    send(thetime() + bold + magenta + " " + userid + " has entered the schat room.")
+
+def exit_room():
+    send(thetime() + bold + magenta + " " + userid + " has left the schat room.")
+
+def display_warning(warning, delay=1):
+    os.system('clear')
+    os.system('setterm -cursor off')
+    print(red + bold + warning + default)
+    sleep(delay)
+    os.system('setterm -cursor on')
+    
+def Main():
+    enter_room()
+    display_prompt()
+
+if __name__ == '__main__':
+    Main()
