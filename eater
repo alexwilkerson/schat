@@ -7,16 +7,17 @@
 ##################################
 
 import subprocess
-import os
+import os, sys
 import datetime
+import time
 from termcolors import *
 
 userid = os.getlogin()
 
 def welcome():
-    print(bold + "-----------------> " + white\
-        + "+++" + red + " /TMP/.SCHAT " + white + "+++ "\
-        + blue + underline + "love yourself." + default)
+    print(bgwhite + bold + " ----------------> " + black\
+        + "+++" + red + " /TMP/.SCHAT " + black + "+++ "\
+        + blue + underline + "love yourself." + default + " " + bgdefault)
 
 def thetime():
     return datetime.datetime.now().strftime("[%Y-%m-%d %H:%M]");
@@ -30,14 +31,29 @@ def tail():
     while running:
         line = proc.stdout.readline().rstrip().decode('utf-8')
         # execution calls begin with %#
-        if line == "%#deletelog":
-            os.system('clear')
-            print(thetime() + bold + red + " --- LOG CLEARED ---" + default)
+        if line[:2] == "%#":
+            line = line.split()
+            # second argument is unix time stamp.
+            # this compares, and if current time is greater
+            # than time.time()+delay sent, then run command
+            # otherwise ignore
+            if float(line[1]) >= time.time():
+                if line[0] == "%#deletelog":
+                    os.system('clear')
+                    print(thetime() + bold + red + " --- LOG CLEARED ---" + default)
+                elif line[0] =="%#colortest":
+                    colortest()
         else:
             # replaces current userid to red
             line = line.replace(userid + ":", red + userid + ":" + default)
             print(line)
 
+def colortest():
+    for i in range(0, 16):
+        for j in range(0, 16):
+            code = str(i * 16 + j)
+            sys.stdout.write("\033[48;5;" + code + "m " + code.ljust(4))
+        print("\033[0m")
 
 def Main():
     welcome()

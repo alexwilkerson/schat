@@ -10,6 +10,7 @@
 import os
 import datetime
 import random, re
+import time
 from time import sleep
 from termcolors import *
 
@@ -48,16 +49,30 @@ def display_prompt():
             # delete log
             elif commands[0] == "deletelog" and len(commands) == 1:
                 delete_log()
+            elif commands[0] == "colortest" and len(commands) == 1:
+                colortest()
             # command not found
             else:
                 display_warning("Command not found.")
         else:
             send(thetime() + " " + bold + blue + userid + ": " + message)
 
-def delete_log():
+def colortest():
+    # amount of time for command to be valid
+    delay = 1
     try:
         f = open('/tmp/.schat.log', 'a')
-        f.write("%#deletelog\n")
+        f.write("%#colortest " + str(time.time()+delay) + "\n")
+        f.close()
+    except:
+        display_warning("Error running color test.") 
+
+def delete_log():
+    # amount of time for command to be valid
+    delay = 1
+    try:
+        f = open('/tmp/.schat.log', 'a')
+        f.write("%#deletelog " + str(time.time()+delay) + "\n")
         f.close()
         sleep(0.3)
         f = open('/tmp/.schat.log', 'w')
