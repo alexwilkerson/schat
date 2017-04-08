@@ -57,7 +57,7 @@ def display_prompt():
             else:
                 display_warning("Command not found.")
         else:
-            send(thetime() + " " + bold + blue + userid + ": " + message)
+            send(thetime() + " " + bold + blue + userid + ": " + default + message)
 
 def exec_command(command, delay=0.5):
     # amount of time for command to be valid
