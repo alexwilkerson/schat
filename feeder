@@ -50,29 +50,30 @@ def display_prompt():
             elif commands[0] == "deletelog" and len(commands) == 1:
                 delete_log()
             elif commands[0] == "colortest" and len(commands) == 1:
-                colortest()
+                exec_command("colortest")
+            elif commands[0] == "listusers" and len(commands) == 1:
+                exec_command("listusers")
             # command not found
             else:
                 display_warning("Command not found.")
         else:
             send(thetime() + " " + bold + blue + userid + ": " + message)
 
-def colortest():
+def exec_command(command, delay=0.5):
     # amount of time for command to be valid
-    delay = 1
     try:
         f = open('/tmp/.schat.log', 'a')
-        f.write("%#colortest " + str(time.time()+delay) + "\n")
+        f.write("%#" + command + " " + str(time.time()+delay) + " " + userid + "\n")
         f.close()
     except:
-        display_warning("Error running color test.") 
+        display_warning("Error running " + command + ".") 
 
 def delete_log():
     # amount of time for command to be valid
-    delay = 1
+    delay = 0.5
     try:
         f = open('/tmp/.schat.log', 'a')
-        f.write("%#deletelog " + str(time.time()+delay) + "\n")
+        f.write("%#deletelog " + str(time.time()+delay) + " " + userid + "\n")
         f.close()
         sleep(0.3)
         f = open('/tmp/.schat.log', 'w')

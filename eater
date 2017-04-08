@@ -34,6 +34,7 @@ def tail():
         if line[:2] == "%#":
             line = line.split()
             command_time = float(line[1])
+            command_user = line[2]
             # second argument is unix time stamp.
             # this compares, and if current time is greater
             # than time.time()+delay sent, then run command
@@ -41,9 +42,12 @@ def tail():
             if command_time >= time.time():
                 if line[0] == "%#deletelog":
                     os.system('clear')
-                    print(thetime() + bold + red + " --- LOG CLEARED ---" + default)
+                    print(thetime() + bold + red + " --- LOG CLEARED BY " + line[2] + " ---" + default)
                 elif line[0] =="%#colortest":
                     colortest()
+
+                elif line[0] == "%#listusers" and command_user == userid:
+                    listusers()
         else:
             # replaces current userid to red
             line = line.replace(userid + ":", red + userid + ":" + default)
@@ -55,6 +59,14 @@ def colortest():
             code = str(i * 16 + j)
             sys.stdout.write("\033[48;5;" + code + "m " + code.ljust(4))
         print("\033[0m")
+
+def listusers():
+    users = []
+    ps = subprocess.Popen(['ps', '-au'], stdout=subprocess.PIPE).communicate()[0].decode('utf-8').splitlines()
+    for p in ps:
+        if "schat.sh" in p:
+            users.append(p.split()[0])
+    print(thetime() + bold + yellow + " Users Online: " + rbold + blue + ", ".join(list(set(users))) + default)
 
 def Main():
     welcome()
