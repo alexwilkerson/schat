@@ -8,6 +8,7 @@
 
 import subprocess
 import os
+import datetime
 from termcolors import *
 
 userid = os.getlogin()
@@ -17,6 +18,9 @@ def welcome():
         + "+++" + red + " /TMP/.SCHAT " + white + "+++ "\
         + blue + underline + "love yourself." + default)
 
+def thetime():
+    return datetime.datetime.now().strftime("[%Y-%m-%d %H:%M]");
+
 def tail():
     filename = "/tmp/.schat.log"
     proc = subprocess.Popen(['tail', '-F', filename],\
@@ -25,9 +29,14 @@ def tail():
     running = True
     while running:
         line = proc.stdout.readline().rstrip().decode('utf-8')
-        # replaces current userid to red
-        line = line.replace(userid + ":", red + userid + ":" + default)
-        print(line)
+        # execution calls begin with %#
+        if line == "%#deletelog":
+            os.system('clear')
+            print(thetime() + bold + red + " --- LOG CLEARED ---" + default)
+        else:
+            # replaces current userid to red
+            line = line.replace(userid + ":", red + userid + ":" + default)
+            print(line)
 
 
 def Main():

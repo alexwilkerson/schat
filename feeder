@@ -45,11 +45,27 @@ def display_prompt():
                     roll(commands[1])
                 else:
                     display_warning("Invalid number of arguments.")
+            # delete log
+            elif commands[0] == "deletelog" and len(commands) == 1:
+                delete_log()
             # command not found
             else:
                 display_warning("Command not found.")
         else:
             send(thetime() + " " + bold + blue + userid + ": " + message)
+
+def delete_log():
+    try:
+        f = open('/tmp/.schat.log', 'a')
+        f.write("%#deletelog\n")
+        f.close()
+        sleep(0.3)
+        f = open('/tmp/.schat.log', 'w')
+        f.write("")
+        f.flush()
+        f.close()
+    except:
+        display_warning("Error deleting log file.")
 
 def roll(dice):
     try:
