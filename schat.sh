@@ -11,22 +11,10 @@ userid=$(whoami)
 # change this to /tmp/ if updating
 dir="./"
 
-# script for top pane
-cat > /tmp/.top_pane_$userid.sh << EOF
-#!$(which bash)
-touch /tmp/.schat.log
-echo -e "\e[1m\e[31m*** \e[35mwelcome to schat school chat \e[31m***\e[0m"
-echo -e "\e[1m\e[31mtype !exit to exit\e[0m"
-echo ""
-# logreader reads the incoming text, can split processes
-tail -F /tmp/.schat.log | $dir.logreader
-EOF
-
 # script for bottom pane
 cat > /tmp/.bottom_pane_$userid.sh << EOF
 #!$(which bash)
 function cleanup {
-    rm /tmp/.top_pane_$userid.sh
     rm /tmp/.bottom_pane_$userid.sh
     tmux kill-session -t schat
 }
@@ -74,12 +62,12 @@ done
 cleanup
 EOF
 
-chmod +x /tmp/.top_pane_$userid.sh
 chmod +x /tmp/.bottom_pane_$userid.sh
+chmod +x /tmp/.eater
 chmod a+w /tmp/.schat.log
 
 # set up tmux session
-tmux new-session -d -s "schat" "/tmp/.top_pane_$userid.sh"
+tmux new-session -d -s "schattr" "/tmp/.eater"
 tmux split-window -v "/tmp/.bottom_pane_$userid.sh"
 tmux resize-pane -D 20
 tmux attach-session 
