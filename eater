@@ -33,11 +33,12 @@ def tail():
         # execution calls begin with %#
         if line[:2] == "%#":
             line = line.split()
+            command_time = float(line[1])
             # second argument is unix time stamp.
             # this compares, and if current time is greater
             # than time.time()+delay sent, then run command
             # otherwise ignore
-            if float(line[1]) >= time.time():
+            if command_time >= time.time():
                 if line[0] == "%#deletelog":
                     os.system('clear')
                     print(thetime() + bold + red + " --- LOG CLEARED ---" + default)
