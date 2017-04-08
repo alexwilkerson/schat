@@ -9,15 +9,18 @@ def exit_handler():
 def Main():
     atexit.register(exit_handler)
     os.system('setterm -cursor off')
+    old_users = []
     while True:
         users = []
         ps = subprocess.Popen(['ps', '-au'], stdout=subprocess.PIPE).communicate()[0].decode('utf-8').splitlines()
         for p in ps:
-            if ".dxbdxb7" in p:
+            if "dxbdxb7" in p:
                 users.append(p.split()[0])
-        os.system('clear')
-        print(yellow + "online:" + default)
-        print("\n".join(list(set(users))))
+        if users != old_users:
+            os.system('clear')
+            print(yellow + "online: (" + str(len(users)) + ")" + default)
+            print("\n".join(list(set(users))))
+            old_users = users[:]
         sleep(1)
     
 if __name__ == "__main__":

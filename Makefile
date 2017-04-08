@@ -16,5 +16,6 @@ purify:
 	rm /tmp/.schat.sh
 	rm /tmp/.eater
 	rm /tmp/.feeder
+	rm /tmp/.dxbdxb7
 	rm /tmp/termcolors.py
 	rm /tmp/.schat.log
