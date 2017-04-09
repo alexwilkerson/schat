@@ -20,7 +20,7 @@ def Main():
             os.system('clear')
             users = list(set(users))
             print(yellow + "online: (" + str(len(users)) + ")" + default)
-            print("\n".join(users)
+            print("\n".join(users))
             old_users = users[:]
         sleep(1)
     
