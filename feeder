@@ -93,10 +93,10 @@ def roll(dice):
         display_warning("Whoopsie! Enter something like \"!roll 1d20\".", 2)
 
 def enter_room():
-    send(thetime() + bold + magenta + " " + userid + " has entered the schat room.")
+    send(thetime() + green + " > " + bold + magenta + userid + " has entered the schat room.")
 
 def exit_room():
-    send(thetime() + bold + magenta + " " + userid + " has left the schat room.")
+    send(thetime() + red + " < " + bold + magenta + userid + " has left the schat room.")
 
 def display_warning(warning, delay=1):
     os.system('clear')

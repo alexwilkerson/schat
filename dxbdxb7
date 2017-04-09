@@ -18,8 +18,9 @@ def Main():
                 users.append(p.split()[0])
         if users != old_users:
             os.system('clear')
+            users = list(set(users))
             print(yellow + "online: (" + str(len(users)) + ")" + default)
-            print("\n".join(list(set(users))))
+            print("\n".join(users)
             old_users = users[:]
         sleep(1)
     
