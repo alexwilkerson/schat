@@ -42,7 +42,7 @@ def tail():
             if command_time >= time.time():
                 if line[0] == "%#deletelog":
                     os.system('clear')
-                    print(thetime() + bold + red + " --- LOG CLEARED BY " + line[2] + " ---" + default)
+                    print(thetime() + bold + red + " + LOG CLEARED BY " + line[2] + "." + default)
                 elif line[0] =="%#colortest":
                     colortest()
 

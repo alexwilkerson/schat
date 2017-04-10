@@ -14,8 +14,17 @@ import time
 from time import sleep
 from termcolors import *
 import atexit
+import socket
 
 userid = os.getlogin()
+
+#######################
+# client stuff
+host = ''
+port = 0 # use any unused port
+server = ('', 1337)
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.bind((host, port))
 
 def send(line):
     try:
@@ -39,6 +48,14 @@ def display_prompt():
             if commands[0] == "exit" and len(commands) == 1:
                 exit_room()
                 os.system('tmux kill-session -t schattr')
+            elif commands[0] == "killserver" and len(commands) == 1:
+                server_message("killserver")
+            elif commands[0] == "windowup" and len(commands) == 1:
+                server_message("window 1")
+            elif commands[0] == "windowdown" and len(commands) == 1:
+                server_message("window 0")
+            elif commands[0] == "windowlist" and len(commands) == 1:
+                server_message("windowlist")
             # dice roll
             elif commands[0] == "roll":
                 if len(commands) == 1:
@@ -58,7 +75,7 @@ def display_prompt():
             else:
                 display_warning("Command not found.")
         else:
-            send(thetime() + " " + bold + blue + userid + ": " + default + message)
+            send(thetime() + "   " + bold + blue + userid + ": " + default + message)
 
 def exec_command(command, delay=0.5):
     # amount of time for command to be valid
@@ -87,7 +104,7 @@ def delete_log():
 def roll(dice):
     try:
         a,b,c=re.findall("^(\d*)d(\d+)(\+\d+)?$",dice)[0];the_roll=int(c or 0)+(sum(random.randint(1,int(b))for i in range(int(a or 1)))or q)
-        send(thetime() + " " + yellow + userid + " rolled "
+        send(thetime() + white + " $ " + yellow + userid + " rolled "
                 + red + dice + yellow + " and got a " + red
                 + str(the_roll) + yellow + ".")
     except:
@@ -98,6 +115,7 @@ def enter_room():
 
 def exit_room():
     send(thetime() + red + " < " + bold + magenta + userid + " has left the schat room.")
+    s.close()
 
 def display_warning(warning, delay=1):
     os.system('clear')
@@ -105,11 +123,17 @@ def display_warning(warning, delay=1):
     print(red + bold + warning + default)
     sleep(delay)
     os.system('setterm -cursor on')
-    
+
+def server_message(message):
+    message = userid + " " + message
+    s.sendto(message.encode(), server)
+
 def Main():
     atexit.register(exit_room)
     enter_room()
     display_prompt()
+
+    s.close()
 
 if __name__ == '__main__':
     Main()
