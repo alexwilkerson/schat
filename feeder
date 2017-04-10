@@ -13,6 +13,7 @@ import random, re
 import time
 from time import sleep
 from termcolors import *
+import atexit
 
 userid = os.getlogin()
 
@@ -106,6 +107,7 @@ def display_warning(warning, delay=1):
     os.system('setterm -cursor on')
     
 def Main():
+    atexit.register(exit_room)
     enter_room()
     display_prompt()
 
