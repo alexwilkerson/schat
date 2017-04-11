@@ -16,8 +16,10 @@ def Main():
         who = subprocess.Popen(['who'], stdout=subprocess.PIPE).communicate()[0].decode('utf-8').splitlines()
         for p in ps:
             user = p.split()[0]
-            if "dxbdxb7" in p and user in who:
-                users.append(user)
+            if "dxbdxb7" in p:
+                for w in who:
+                    if user in w:
+                        users.append(user)
         if users != old_users:
             os.system('clear')
             users = list(set(users))
