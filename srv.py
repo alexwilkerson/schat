@@ -67,7 +67,10 @@ def motd(user, message):
     print("motd called")
     c.execute('INSERT INTO motd (date, user, message) VALUES (?, ?, ?)', (datetime.now(), user, message))
     conn.commit()
-    send(bgwhite + black + thetime() + magenta + " % " + blue + user + black + " set the motd to: " + magenta + "\"" + message + "\"" + bgdefault)
+    # temp hack, till server is TCP
+    motd_hack = open("/tmp/.motd", "w")
+    motd_hack.write(message)
+    send(thetime() + magenta + " % " + bgwhite + blue + user + black + " set the motd to: " + magenta + "\"" + message + "\"" + bgdefault)
 
 def exit_function():
     s.close()

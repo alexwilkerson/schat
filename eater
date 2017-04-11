@@ -15,9 +15,10 @@ from termcolors import *
 userid = os.getlogin()
 
 def welcome():
-    print(bgwhite + bold + " ----------------> " + black\
-        + "+++" + red + " /TMP/.SCHAT " + black + "+++ "\
-        + blue + underline + "love yourself." + default + " " + bgdefault)
+    with open("/tmp/.motd", "r") as f:
+        print(bold + red + " ---------------->"\
+            + " + " + red + "/tmp/.schat.sh +++\n"\
+            + blue + underline + f.readline() + "\n" + default)
 
 def thetime():
     return datetime.datetime.now().strftime("[%Y-%m-%d %H:%M]");
