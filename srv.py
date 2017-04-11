@@ -1,5 +1,6 @@
 import socket
 import time, datetime
+from datetime import datetime
 import sqlite3
 import atexit
 from termcolors import *
@@ -23,7 +24,7 @@ def send(line):
         f.close()
 
 def thetime():
-    return datetime.datetime.now().strftime("[%Y-%m-%d %H:%M]");
+    return datetime.now().strftime("[%Y-%m-%d %H:%M]");
 
 def windowlist(user):
     send(thetime() + white + " ~ " + green + "The car's current status as requested by (" + blue + user + green + "):")
@@ -62,6 +63,12 @@ def window(user, status):
 def pleaserespond(userid, addr):
     sendto("rcvd".encode(), addr)
 
+def motd(user, message):
+    print("motd called")
+    c.execute('INSERT INTO motd (date, user, message) VALUES (?, ?, ?)', (datetime.now(), user, message))
+    conn.commit()
+    send(bgwhite + black + thetime() + magenta + " % " + blue + user + black + " set the motd to: " + magenta + "\"" + message + "\"" + bgdefault)
+
 def exit_function():
     s.close()
     c.close()
@@ -88,6 +95,8 @@ def Main():
                 windowlist(userid)
             elif command == "pleaserespond":
                 pleaserespond(userid, addr)
+            elif command == "motd":
+                motd(userid, " ".join(data[2:]))
         except:
             pass
 

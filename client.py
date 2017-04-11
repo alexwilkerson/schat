@@ -1,24 +1,22 @@
-import socket
-import threading
-import time
+from socket import socket, AF_INET, SOCK_STREAM
 
-def Main():
-    host = ''
-    port = 0
-
-    server = ('', 1337)
-
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.bind((host, port))
-    s.setblocking(0)
-
-    message = input("-> ")
+def client_prompt(sock):
+    message = os.getlogin()
     while message != 'q':
         if message != '':
-            s.sendto(message.encode(), server)
-        message = input("-> ")
+            sock.send(message.encode())
+            data = sock.recv(1024)
+            data = data.decode()
+            print(data)
+        message = input('-> ')
+    sock.close()
 
-    s.close()
+def client_start():
+    server = ('', 1338)
+
+    sock = socket(AF_INET, SOCK_STREAM)
+    sock.connect(server)
+    client_prompt(sock)
 
 if __name__ == '__main__':
-    Main()
+    client_start()
