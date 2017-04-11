@@ -7,8 +7,6 @@ from termcolors import *
 host = ''
 port = 1337
 
-#clients = []
-
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind((host, port))
 
@@ -33,9 +31,9 @@ def windowlist(user):
     c.execute('SELECT user, windowstatus FROM windows')
     for row in c.fetchall():
         if int(row[1]) == 1:
-            send(thetime() + magenta + " ~ " + green + user + "'s window is up.")
+            send(thetime() + magenta + " ~ " + green + row[0] + "'s window is up.")
         else:
-            send(thetime() + blue + " ~ " + green + user + "'s window is down.")
+            send(thetime() + blue + " ~ " + green + row[0] + "'s window is down.")
         time.sleep(1)
 
 def window(user, status):
@@ -61,6 +59,9 @@ def window(user, status):
             send(thetime() + magenta + " ~ " + green + user + " put their window down.")
     conn.commit()
 
+def pleaserespond(userid, addr):
+    sendto("rcvd".encode(), addr)
+
 def exit_function():
     s.close()
     c.close()
@@ -72,7 +73,7 @@ def Main():
     print("Schat Server Started...")
 
     while True:
-        #try:
+        try:
             data, addr = s.recvfrom(1024)
             data = data.decode('utf-8').split()
             userid = data[0]
@@ -85,13 +86,10 @@ def Main():
                 window(userid, int(data[2]))
             elif command == "windowlist":
                 windowlist(userid)
-            #if addr not in clients:
-            #    clients.append(addr)
-            #print(time.ctime(time.time()) + str(addr) + ": :" + str(data))
-            #for client in clients:
-            #    s.sendto(data, client)
-        #except:
-        #    pass
+            elif command == "pleaserespond":
+                pleaserespond(userid, addr)
+        except:
+            pass
 
 if __name__ == '__main__':
     Main()
